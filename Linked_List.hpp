@@ -7,13 +7,14 @@
 
 using namespace std;
 
-// Элемент двусвязного списка: значение + указатели на предыдущий и следующий
+
 template<class T>
 struct Node
-{               // struct - всё будет доступно извне, по-умолчанию public
-    T value;                  // Значение элемента
-    Node<T> *prev = nullptr;  // Указатель на предыдущий элемент
-    Node<T> *next = nullptr;  // Указатель на следующий элемент
+{
+    T value;
+    Node<T> *prev = nullptr;
+    Node<T> *next = nullptr;
+
     Node(T value, Node<T> *prev, Node<T> *next) : value(value), prev(prev), next(next)
     {}
 
@@ -23,7 +24,6 @@ struct Node
         delete next;
         prev = nullptr;
         next = nullptr;
-        delete value;
     }
 };
 
@@ -31,13 +31,12 @@ template<class T>
 class Linked_List
 {
     Node<T> *first = nullptr;  // Первый элемент списка
-    //Node<T> *med = nullptr;
     Node<T> *last = nullptr;   // Последний элемент списка
-    //int count;
+    int count;
 
 public:
     // Создание объекта
-    [[maybe_unused]] Linked_List(T *items, int count);
+    [[maybe_unused]] Linked_List(T *items, int Count);
 
     // Создать пустой список
     Linked_List();
@@ -45,55 +44,53 @@ public:
     // Копирующий конструктор
     Linked_List(const Linked_List<T> &list);
 
-    // == Деструктор - очистка памяти ==
+    /// Деструктор
     ~Linked_List();
 
-    // == Декомпозиция ==
-    // Может выбрасывать исключения: − IndexOutOfRange (если список пуст)
     T getFirst() const;
 
-    // Получить последний элемент в списке
-    // Может выбрасывать исключения: − IndexOutOfRange (если список пуст)
     T getLast() const;
 
-    // Получить элемент по индексу
-    // Может выбрасывать исключения:
-    // − IndexOutOfRange (если индекс отрицательный или больше/равен числу элементов)
-    T &get(int index) const;
+    T get(int index) const;
 
-    // Перегруженные операторы
+    /// получение значения
     T operator[](int i) const;
 
+    /// присвоение значения
     T &operator[](int i);
 
-    // Получить список из всех элементов, начиная с begin и заканчивая end.
-    // Может выбрасывать исключения:
-    // − IndexOutOfRange (если хотя бы один из индексов отрицательный или больше/равен числу элементов)
-    Linked_List<T> *substr(int begin, int end);
 
     // Получить длину списка
-    int getLength() const;
+    [[nodiscard]] int getLength() const;
 
     // == Операции ==
     // Добавляет элемент в конец списка
-    void append(T item);
+    void append(T &item);
 
-    // Добавляет элемент в начало списка
-    void prepend(T item);
+    /// Добавляет элемент в начало списка
+    void prepend(T &item);
 
-    // Вставляет элемент в заданную позицию
+    /// Вставляет элемент в заданную позицию
     void resize(int size);
 
-    // Может выбрасывать исключения:
-    // − IndexOutOfRange (если индекс отрицательный или больше/равен числу элементов)
-    void insert(T item, int index);
+    /// вставка элемента по индексу
+    void insert(T &item, int index);
 
-    // Сцепляет два списка
-    Linked_List<T> *Concat(Linked_List<T> *list);
+    /// Соединение двух строк
+    Linked_List<T> *concat(Linked_List<T> *list) const;
 
-    // Удаление элемента по индексу
-    void removeAt(int index);
+    /// получение substr с begin до end
+    Linked_List<T> *substr(int begin, int end) const;
+
+    /// поиск первого вхождения подстроки в строке между begin и end
+    int find(const Linked_List<T> &list, int begin = 0, int end = -1) const;
+
+    /// поиск последнего вхождения подстроки в строке между begin и end
+    int rfind(const Linked_List<T> &list, int begin = 0, int end = -1) const;
+
+    /// замена всех вхождений подстроки на новую строку
+    Linked_List<T> *replace(Linked_List<T> *a, Linked_List<T> *listB) const;
 
     // Вывод последовательности на печать (в консоль)
-    void print();;
+    void print();
 };

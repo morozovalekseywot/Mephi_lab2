@@ -1,20 +1,20 @@
 #include "Linked_List.hpp"
 
 template<class T>
-[[maybe_unused]] Linked_List<T>::Linked_List(T *items, int count)
+[[maybe_unused]] Linked_List<T>::Linked_List(T *items, int Count):count(Count)
 {
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < Count; i++)
     {
         append(items[i]);
     }
 }
 
 template<class T>
-Linked_List<T>::Linked_List() : first(nullptr), last(nullptr)
+Linked_List<T>::Linked_List() : first(nullptr), last(nullptr), count(0)
 {}
 
 template<class T>
-Linked_List<T>::Linked_List(const Linked_List<T> &list) : first(nullptr), last(nullptr)
+Linked_List<T>::Linked_List(const Linked_List<T> &list) : first(nullptr), last(nullptr), count(list.count)
 {
     for (Node<T> *it = list.first; it != nullptr; it = it->next)
     {
@@ -23,7 +23,7 @@ Linked_List<T>::Linked_List(const Linked_List<T> &list) : first(nullptr), last(n
             first = node;
         if (last != nullptr)
             last->next = node;
-        last = node;  // Последний элемент
+        last = node;
     }
 }
 
@@ -36,6 +36,7 @@ Linked_List<T>::~Linked_List()
         first = first->next;
         delete node;
     }
+    first = nullptr;
     last = nullptr;
 }
 
@@ -43,7 +44,7 @@ template<class T>
 void Linked_List<T>::resize(int size)
 {
     if (size < 0)
-        throw bad_array_new_length("Linked_List::resize error,new size<0");
+        throw bad_array_new_length();
     if (size <= getLength())
     {
         int j = getLength();
@@ -55,17 +56,20 @@ void Linked_List<T>::resize(int size)
             j--;
         }
         last->next = nullptr;
+        count = size;
         return;
     } else
     {
         int old_size = getLength();
-        Node<T> *it = last;
         while (size != old_size)
         {
             auto *node = new Node<T>(NULL, last, nullptr);
             last->next = node;
             last = node;
+            old_size++;
         }
+        last->next = nullptr;
+        count = size;
         return;
     }
 }
@@ -87,11 +91,10 @@ T Linked_List<T>::getLast() const
 }
 
 template<class T>
-T &Linked_List<T>::get(int index) const
+T Linked_List<T>::get(int index) const
 {
     if (index < 0 || index >= getLength())
         throw out_of_range("Index out of range");
-    // Пробегаем по элементам от первого до последнего и увеличиваем счётчик размера
     int j = 0;
     for (Node<T> *n = first; n != nullptr; n = n->next)
     {
@@ -114,18 +117,18 @@ T &Linked_List<T>::operator[](int i)
 }
 
 template<class T>
-Linked_List<T> *Linked_List<T>::substr(int begin, int end)
+Linked_List<T> *Linked_List<T>::substr(int begin, int end) const
 {
-    if (begin < 0 or end < 0 or begin > end)
+    if (begin < 0 || end < 0 || begin > end)
     {
         if (begin > end)
             throw invalid_argument("In function substring begin < end");
         else
             throw out_of_range("In function substring begin or end < 0");
     }
-
+    if (end > count)
+        throw out_of_range("In function substring end>size");
     Node<T> *now = first;
-    // Пропускаем все элементы до begin
     for (int i = 0; i < begin && now != nullptr; i++)
         now = now->next;
     auto *subList = new Linked_List<T>();
@@ -140,49 +143,41 @@ Linked_List<T> *Linked_List<T>::substr(int begin, int end)
 template<class T>
 int Linked_List<T>::getLength() const
 {
-    int size = 0;
-    // Пробегаем по элементам от первого до последнего и увеличиваем счётчик размера
-    for (Node<T> *now = first; now != nullptr; now = now->next)
-    {
-        size++;
-    }
-    return size;
+    return count;
 }
 
 template<class T>
-void Linked_List<T>::append(T item)
+void Linked_List<T>::append(T &item)
 {
     auto *node = new Node<T>(item, last, nullptr);
-    // Начало и конец списка
     if (first == nullptr)
         first = node;
     if (last != nullptr)
         last->next = node;
     last = node;
+    count++;
 }
 
 template<class T>
-void Linked_List<T>::prepend(T item)
+void Linked_List<T>::prepend(T &item)
 {
     auto *node = new Node<T>(item, nullptr, first);
-    // Начало и конец списка
     if (first != nullptr)
         first->prev = node;
     first = node;
     if (last == nullptr)
         last = node;
+    count++;
 }
 
 template<class T>
-void Linked_List<T>::insert(T item, int index)
+void Linked_List<T>::insert(T &item, int index)
 {
     if (index < 0 || index >= getLength())
         throw out_of_range("Index out of range");
-    // Находим элемент после которого надо вставить
     Node<T> *it = first;
     for (int i = 0; i < index - 1; i++)
         it = it->next;
-    // Создаём новый элемент
     auto *node = new Node<T>(item, it, it->next);
     it->next = node;
     if (node->next == nullptr)
@@ -190,12 +185,13 @@ void Linked_List<T>::insert(T item, int index)
         last = node;
     } else
     {
-        node->next->prev = node;  // Чтобы следующий элемент ссылался на текущий
+        node->next->prev = node;
     }
+    count++;
 }
 
 template<class T>
-Linked_List<T> *Linked_List<T>::Concat(Linked_List<T> *list)
+Linked_List<T> *Linked_List<T>::concat(Linked_List<T> *list) const
 {
     auto *res = new Linked_List<T>(*this);
     for (Node<T> *it = list->first; it != nullptr; it = it->next)
@@ -206,40 +202,99 @@ Linked_List<T> *Linked_List<T>::Concat(Linked_List<T> *list)
 }
 
 template<class T>
-void Linked_List<T>::removeAt(int index)
+void Linked_List<T>::print()
 {
-    Node<T> *toDelete = first;
-    for (int i = 0; i < index; i++)
+    for (Node<T> *node = first; node != nullptr; node = node->next)
     {
-        toDelete = toDelete->next;
+        cout << node->value;
     }
-    if (toDelete == first)
-    {
-        first = toDelete->next;
-    } else
-    {
-        toDelete->prev->next = toDelete->next;
-    }
-    if (toDelete == last)
-    {
-        last = toDelete->prev;
-    } else
-    {
-        toDelete->next->prev = toDelete->prev;
-    }
-    delete toDelete;
 }
 
 template<class T>
-void Linked_List<T>::print()
+int Linked_List<T>::find(const Linked_List<T> &list, int begin, int end) const
 {
-    wcout << L"Linked_List (size = " << getLength() << ")";
-    for (Node<T> *n = first; n != nullptr; n = n->next)
+    if (end == -1)
+        end = count;
+    else
+        end = min(end, count);
+    if (list.getLength() > end - begin || list.getLength() == 0)
+        return end;
+    Node<T> *it;
+    int index;
+    for (index = 0; index < begin; index++)
+        it = it->next;
+    for (index = begin; index < end; index++)
     {
-        T value = n->value;
-        cout << value;
+        int j = 0, i = index;
+        Node<T> *iter = Node<T>(it->value, it->prev, it->next);
+        while (j < list.getLength() && i < end && iter->value == list[j])
+        {
+            iter = iter->next;
+            i++;
+            j++;
+        }
+        it = it->next;
+        if (j == list.getLength())
+            return index;
     }
-    cout << endl;
+    return end;
+}
+
+template<class T>
+int Linked_List<T>::rfind(const Linked_List<T> &list, int begin, int end) const
+{
+    if (end == -1)
+        end = count;
+    else
+        end = min(end, count);
+    if (list.getLength() > end - begin || list.getLength() == 0)
+        return end;
+    Node<T> *it;
+    int index;
+    for (index = count - 1; index >= end; index++)
+        it = it->prev;
+    for (index = end - 1; index >= begin; index--)
+    {
+        Node<T> *iter = Node<T>(it->value, it->prev, it->next);
+        int j = list.getLength(), i = index;
+        while (j >= 0 && i >= begin && iter->value == list[j])
+        {
+            iter = iter->prev;
+            i--;
+            j--;
+        }
+        it = it->prev;
+        if (j == -1)
+            return i + 1; // индекс на первый элемент строки
+    }
+    return end;
+}
+
+template<class T>
+Linked_List<T> *Linked_List<T>::replace(Linked_List<T> *listA, Linked_List<T> *listB) const
+{
+    if (listA->getLength() == 0)
+        return *this;
+    auto *Str = new Linked_List<T>(*this);
+    Str->resize(count * listB->m_size / listA->m_size + count);
+    int it = 0;
+    Node<T> *now = first;
+    for (int index = 0; index < count;)
+    {
+        int i = find(listA, index);
+        for (int j = index; j < i; j++)
+        {
+            Str[it++] = now->value;
+            now = now->next;
+        }
+        for (int j = 0; j < listB->count; j++)
+        {
+            Str[it++] = listB[j];
+        }
+        index += listA->count;
+    }
+    Str->resize(it + 1);
+    return Str;
 }
 
 
