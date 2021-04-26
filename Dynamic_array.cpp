@@ -15,6 +15,7 @@ void Dynamic_array<T>::resize(int size)
         memcpy(new_data, str, sizeof(T) * size);
         str = new_data;
         capacity = new_capacity;
+        m_size++;
     } else
         m_size = size;
 }
@@ -35,7 +36,6 @@ void Dynamic_array<T>::insert(T &item, int &i)
     for (int j = m_size; j > i; j--)
         str[j] = str[j - 1];
     str[i] = item;
-    m_size++;
 }
 
 template<class T>
@@ -63,7 +63,7 @@ T Dynamic_array<T>::operator[](int i) const
 }
 
 template<class T>
-T Dynamic_array<T>::get(int i) const
+T &Dynamic_array<T>::get(int i) const
 {
     if (i < 0 || i >= m_size)
         throw out_of_range("Index out of range");
@@ -89,6 +89,7 @@ bool Dynamic_array<T>::operator==(const T &a)
     return true;
 }
 
+/*
 template<class T>
 Dynamic_array<T> &Dynamic_array<T>::operator=(const Dynamic_array<T> &a)
 {
@@ -99,7 +100,7 @@ Dynamic_array<T> &Dynamic_array<T>::operator=(const Dynamic_array<T> &a)
         str[i] = a[i];
     return *this;
 }
-
+*/
 template<class T>
 int Dynamic_array<T>::find(const Dynamic_array<T> &a, int begin, int end) const
 {
@@ -147,7 +148,7 @@ int Dynamic_array<T>::rfind(const Dynamic_array<T> &a, int begin, int end) const
 }
 
 template<class T>
-Dynamic_array<T> *Dynamic_array<T>::replace(Dynamic_array<T> *a, Dynamic_array<T> *b) const
+Dynamic_array<T> &Dynamic_array<T>::replace(Dynamic_array<T> *a, Dynamic_array<T> *b) const
 {
     if (a == b || a->size() == 0)
         return *this;
@@ -186,7 +187,7 @@ T Dynamic_array<T>::getLast() const
 }
 
 template<class T>
-Dynamic_array<T> *Dynamic_array<T>::substr(int begin, int end) const
+Dynamic_array<T> &Dynamic_array<T>::substr(int begin, int end) const
 {
     if (begin < 0 || end < 0 || begin > end)
     {
@@ -206,7 +207,7 @@ Dynamic_array<T> *Dynamic_array<T>::substr(int begin, int end) const
 }
 
 template<class T>
-Dynamic_array<T> *Dynamic_array<T>::concat(Dynamic_array<T> *array) const
+Dynamic_array<T> &Dynamic_array<T>::concat(Dynamic_array<T> *array) const
 {
     auto *res = new Dynamic_array<T>(m_size + array->m_size);
     for (int i = 0; i < m_size; i++)

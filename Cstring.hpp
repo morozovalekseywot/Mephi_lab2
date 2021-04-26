@@ -1,56 +1,121 @@
 #pragma once
 
-template<class T>
+#include "Linked_List_Sequence.hpp"
+#include "Array_Sequence.hpp"
+
+template<class T, class basis = ArraySequence<T>>
 class Cstring
 {
+    basis symbols;
 public:
-    /// получение первого элемента
-    virtual T getFirst() const = 0;
+    Cstring() : symbols()
+    {};
 
-    /// получение последнего элемента
-    virtual T getLast() const = 0;
-
-    /// получение элемента по индексу
-    virtual T get(int index) const = 0;
-
-    /// получение значения
-    virtual T operator[](int i) const = 0;
-
-    /// присвоение значения
-    virtual T &operator[](int i) = 0;
+    Cstring(T *items, int count) : symbols(items, count)
+    {};
 
     /// получить длину строки
-    [[nodiscard]] virtual int getLength() const = 0;
+    [[nodiscard]] int getLen() const
+    {
+        return symbols.getLen();
+    }
+
+    /// получение первого элемента
+    T getFirst() const
+    {
+        return symbols.getFirst();
+    }
+
+    /// получение последнего элемента
+    T getLast() const
+    {
+        return symbols.getLast();
+    }
+
+    /// получение элемента по индексу
+    T get(int index) const
+    {
+        return symbols.get(index);
+    }
+
+    /// получение значения
+    T operator[](int i) const
+    {
+        return symbols[i];
+    }
+
+    /// присвоение значения
+    T &operator[](int i)
+    {
+        return symbols[i];
+    }
 
     /// вставка элемента в конец
-    virtual void append(T &item) = 0;
+    void append(T &item)
+    {
+        symbols.append(item);
+    }
 
     /// вставка элемента в начало
-    virtual void prepend(T &item) = 0;
+    void prepend(T &item)
+    {
+        symbols.prepend(item);
+    }
 
     /// вставка элемента по индексу
-    virtual void insert(T &item, int index) = 0;
+    void insert(T &item, int index)
+    {
+        symbols.insert(item, index);
+    }
 
     /// получение substr с begin до end
-    virtual Cstring<T> *substr(int begin, int end) const = 0;
-
-    /// Соединение двух строк
-    virtual Cstring<T> *concat(Cstring<T> *second_str) = 0;
-
-    /// Вывод строки
-    virtual void print() = 0;
+    Cstring<T, basis> *substr(int begin, int end) const
+    {
+        return Cstring<T,basis>((symbols.substr(begin, end)).data,(symbols.substr(begin, end))->getLength);
+    }
 
     /// поиск первого вхождения подстроки в строке между begin и end, если её нет вернёт -1
-    virtual int find(Cstring<T> &subStr, int begin = 0, int end = -1) = 0;
+    int find(Cstring<T, basis> &subStr, int begin = 0, int end = -1) const
+    {
+        int i = symbols.find(subStr, begin, end);
+        if (i != end)
+            return i;
+        else
+            return -1;
+    }
 
     /// поиск последнего вхождения подстроки в строке между begin и end, если её нет вернёт -1
-    virtual int rfind(Cstring<T> &subStr, int begin = 0, int end = -1) = 0;
+    int rfind(Cstring<T, basis> &subStr, int begin = 0, int end = -1) const
+    {
+        int i = symbols.rfind(subStr, begin, end);
+        if (i != end)
+            return i;
+        else
+            return -1;
+    }
+
+    /// Соединение двух строк
+    Cstring<T, basis> *concat(Cstring<T, basis> *second_str)
+    {
+        return symbols.concat(second_str);
+    }
 
     /// замена всех вхождений подстроки на новую строку
-    virtual Cstring<T> *replace(Cstring<T> &oldStr, Cstring<T> &newStr) = 0;
+    Cstring<T, basis> *replace(Cstring<T, basis> &oldStr, Cstring<T, basis> &newStr) const
+    {
+        return symbols.replace(oldStr, newStr);
+    }
+
+    /// печать
+    void print()
+    {
+        symbols.print();
+    }
 
     /// Деструктор
-    virtual ~Cstring<T>() = default;
+    ~Cstring()
+    {
+        delete symbols;
+    }
 };
-
 

@@ -1,110 +1,114 @@
 #pragma once
 
-#include "Dynamic_array.hpp"
-#include "Cstring.hpp"
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <stdexcept>
 
+using namespace std;
 
 template<class T>
-class ArraySequence : public Cstring<T>
+class Dynamic_array
 {
 private:
-    Dynamic_array<T> data;  
+    int m_size;
+    int capacity;
+    T *str;
 public:
-    /// Копирование элементов из переданного массива
-    ArraySequence(T *data, int count) : data(data, count)
-    {}
-
-    /// Создание пустого массива
-    ArraySequence() : data()
-    {};
-
-    /// Копирующий конструктор
-    explicit ArraySequence(const Dynamic_array<T> &array) : data(array)
-    {};
-
-    T getFirst() const override
+    Dynamic_array()
     {
-        return data.getFirst();
-    };
-
-    T getLast() const override
-    {
-        return data.getLast();
-    };
-
-    T get(int index) const override
-    {
-        return data.get(index);
-    };
-
-    T operator[](int i) const override
-    {
-        return data[i];
+        m_size = 0;
+        capacity = 0;
+        str = NULL;
     }
 
-    T &operator[](int i) override
+    Dynamic_array(const Dynamic_array<T> &array)
     {
-        return data[i];
+        m_size = array.m_size;
+        capacity = m_size;
+        str = new T[array.size];
+        memcpy(str, array.data, array.size * sizeof(T));
     }
 
-    Cstring<T> *substr(int begin, int end) const override
+    Dynamic_array(T *data, int count) : m_size(count)
     {
-        return data.substr(begin, end);
+        capacity = m_size;
+        str = new T[count];
+        memcpy(str, data, count * sizeof(T));
     }
 
-    [[nodiscard]] int getLength() const override
+    explicit Dynamic_array(int size)
     {
-        return data.size();
-    }
-
-    void append(T &item) override
-    {
-        data.append(item);
-    }
-
-    int find(Cstring<T> &subStr, int begin, int end) override
-    {
-        int i = data.find(subStr, begin, end);
-        if (i != end)
-            return i;
+        if (size < 0)
+            throw bad_alloc();//"Constructor Dynamic_array error,size<0"
+        m_size = size;
+        capacity = size;
+        for (int i = 0; i < size; ++i)
+        {
+            str[i] = NULL;
+        }
+        if (size != 0)
+            str = new T[size];
         else
-            return -1;
+            str = 0;
     }
 
-    int rfind(Cstring<T> &subStr, int begin, int end) override
+    /// Деструктор
+    ~Dynamic_array<T>()
     {
-        int i = data.rfind(subStr, begin, end);
-        if (i != end)
-            return i;
-        else
-            return -1;
+        delete[] str;
+        str = nullptr;
     }
+    /// получение размера
+    [[nodiscard]] int size() const;
+    /*
+    при уменьшении размера массива, элементы остаются и можно попробовать
+    обратиться к ним, так же сделано и в реализации stl <Vector>
+   */
+    void resize(int size);
 
-    Cstring<T> *replace(Cstring<T> &oldStr, Cstring<T> &newStr) override
-    {
-        return data.replace(oldStr, newStr);
-    }
+    /// вставка элемента в конец
+    void append(T &item);
 
-    void prepend(T &item) override
-    {
-        data.prepend(item);
-    }
+    /// вставка элемента в начало
+    void prepend(T &item);
 
-    void insert(T &item, int index) override
-    {
-        data.insert(item, index);
-    }
+    /// вставка элемента по индексу
+    void insert(T &item, int &i);
 
-    Cstring<T> *concat(Cstring<T> *second_str) override
-    {
-        return data.concat(second_str);
-    }
+    T getFirst() const;
 
+    T getLast() const;
 
-    void print() override
-    {
-        data.print();
-    }
+    T &get(int i) const;
 
-    virtual ~ArraySequence<T>() = default;
+    /// получение значения
+    T operator[](int i) const;
+
+    /// присвоение значения
+    T &operator[](int i);
+
+    bool operator==(const T &a);
+
+    //Dynamic_array<T> &operator=(const Dynamic_array<T> &a);
+
+    /// получение substr с begin до end
+    Dynamic_array<T> &substr(int begin, int end) const;
+
+    /// Соединение двух строк
+    Dynamic_array<T> &concat(Dynamic_array<T> *array) const;
+
+    /// поиск первого вхождения подстроки в строке между begin и end
+    int find(const Dynamic_array<T> &a, int begin = 0, int end = -1) const;
+
+    /// поиск последнего вхождения подстроки в строке между begin и end
+    int rfind(const Dynamic_array<T> &a, int begin = 0, int end = -1) const;
+
+    /// замена всех вхождений подстроки на новую строку
+    Dynamic_array<T> &replace(Dynamic_array<T> *a, Dynamic_array<T> *b) const;
+
+    /// вывод массива на экран
+    void print();
 };
+
+

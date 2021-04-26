@@ -1,7 +1,15 @@
-#include <iostream>
+#include "Cstring.hpp"
+
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    char *my = new char[3];
+    my[0] = 'y';
+    my[1] = 'e';
+    my[2] = 's';
+
+    Cstring<char> s(my, 3);
+
     return 0;
 }

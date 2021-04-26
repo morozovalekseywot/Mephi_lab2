@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Dynamic_array.hpp"
-#include "Cstring.hpp"
+#include "Sequence.hpp"
 
-// АТД последовательность на основе динамического массива
+
 template<class T>
-class ArraySequence : public Cstring<T>
+class ArraySequence : public Sequence<T>
 {
 private:
-    Dynamic_array<T> data;  // Массив данных
+    Dynamic_array<T> data;
 public:
     /// Копирование элементов из переданного массива
     ArraySequence(T *data, int count) : data(data, count)
@@ -19,37 +19,41 @@ public:
     {};
 
     /// Копирующий конструктор
-    explicit ArraySequence(const Dynamic_array<T> &array) : data(array)
+    explicit ArraySequence(Dynamic_array<T> &array) : data(array)
     {};
 
     T getFirst() const override
     {
         return data.getFirst();
-    };
+    }
 
     T getLast() const override
     {
         return data.getLast();
-    };
+    }
 
     T get(int index) const override
     {
         return data.get(index);
-    };
+    }
 
     T operator[](int i) const override
     {
-        return data[i];
+        return data.get(i);
     }
 
     T &operator[](int i) override
     {
-        return data[i];
+        return data.get(i);
     }
 
-    Cstring<T> *substr(int begin, int end) const override
+    Sequence<T> *substr(int begin, int end) const override
     {
-        return data.substr(begin, end);
+        /*
+        auto *sub = new ArraySequence<T>(Dynamic_array<T>(data.substr(begin, end)));
+        return sub;
+         */
+        return new ArraySequence<T>(data.substr(begin, end));
     }
 
     [[nodiscard]] int getLength() const override
@@ -57,32 +61,36 @@ public:
         return data.size();
     }
 
+    int find(Sequence<T> &subStr, int begin, int end) const override
+    {
+        return data.find(subStr, begin, end);
+        /*
+        if (i != end)
+            return i;
+        else
+            return -1;
+        */
+    }
+
+    int rfind(Sequence<T> &subStr, int begin, int end) const override
+    {
+        return data.rfind(subStr, begin, end);
+        /*
+        if (i != end)
+            return i;
+        else
+            return -1;
+        */
+    }
+
+    Sequence<T> *replace(Sequence<T> &oldStr, Sequence<T> &newStr) const override
+    {
+        return data.replace(oldStr, newStr);
+    }
+
     void append(T &item) override
     {
         data.append(item);
-    }
-
-    int find(Cstring<T> &subStr, int begin, int end) override
-    {
-        int i = data.find(subStr, begin, end);
-        if (i != end)
-            return i;
-        else
-            return -1;
-    }
-
-    int rfind(Cstring<T> &subStr, int begin, int end) override
-    {
-        int i = data.rfind(subStr, begin, end);
-        if (i != end)
-            return i;
-        else
-            return -1;
-    }
-
-    Cstring<T> *replace(Cstring<T> &oldStr, Cstring<T> &newStr) override
-    {
-        return data.replace(oldStr, newStr);
     }
 
     void prepend(T &item) override
@@ -95,19 +103,16 @@ public:
         data.insert(item, index);
     }
 
-    // Сцепляет два списка
-    Cstring<T> *concat(Cstring<T> *second_str) override
+    Sequence<T> *concat(Sequence<T> *second_str) override
     {
         return data.concat(second_str);
     }
 
 
-    // Печать на экран всех элементов
     void print() override
     {
         data.print();
     }
 
-    // == Виртуальный деструктор ==
     virtual ~ArraySequence<T>() = default;
 };
