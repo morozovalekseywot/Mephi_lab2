@@ -26,8 +26,8 @@ public:
     {
         m_size = array.m_size;
         capacity = m_size;
-        str = new T[array.size];
-        memcpy(str, array.data, array.size * sizeof(T));
+        str = new T[array.size()];
+        memcpy(str, array.str, array.size() * sizeof(T));
     }
 
     Dynamic_array(T *data, int count) : m_size(count)
@@ -59,8 +59,10 @@ public:
         delete[] str;
         str = nullptr;
     }
+
     /// получение размера
     [[nodiscard]] int size() const;
+
     /*
     при уменьшении размера массива, элементы остаются и можно попробовать
     обратиться к ним, так же сделано и в реализации stl <Vector>
@@ -82,6 +84,10 @@ public:
 
     T &get(int i) const;
 
+    void Set(int index,T &item)
+    {
+        return;
+    }
     /// получение значения
     T operator[](int i) const;
 
@@ -96,7 +102,7 @@ public:
     Dynamic_array<T> &substr(int begin, int end) const;
 
     /// Соединение двух строк
-    Dynamic_array<T> &concat(Dynamic_array<T> *array) const;
+    Dynamic_array<T> &concat(Dynamic_array<T> &array) const;
 
     /// поиск первого вхождения подстроки в строке между begin и end
     int find(const Dynamic_array<T> &a, int begin = 0, int end = -1) const;

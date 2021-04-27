@@ -111,11 +111,12 @@ public:
     {
         symbols.print();
     }
-
+    /*
     /// Деструктор
     ~Cstring()
     {
         delete symbols;
     }
+    */
 };
 

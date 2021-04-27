@@ -61,9 +61,12 @@ public:
         return data.size();
     }
 
-    int find(Sequence<T> &subStr, int begin, int end) const override
+    int find(Sequence<T> *subStr, int begin, int end) const override
     {
-        return data.find(subStr, begin, end);
+        auto sub =  Dynamic_array<T>(subStr->getLength());
+        for (int i = 0; i < subStr->getLength(); i++)
+            sub[i] = subStr->get(i);
+        return data.find(sub, begin, end);
         /*
         if (i != end)
             return i;
@@ -72,9 +75,12 @@ public:
         */
     }
 
-    int rfind(Sequence<T> &subStr, int begin, int end) const override
+    int rfind(Sequence<T> *subStr, int begin, int end) const override
     {
-        return data.rfind(subStr, begin, end);
+        auto sub = Dynamic_array<T>(subStr->getLength());
+        for (int i = 0; i < subStr->getLength(); i++)
+            sub[i] = subStr->get(i);
+        return data.rfind(sub, begin, end);
         /*
         if (i != end)
             return i;
@@ -83,9 +89,15 @@ public:
         */
     }
 
-    Sequence<T> *replace(Sequence<T> &oldStr, Sequence<T> &newStr) const override
+    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) const override
     {
-        return data.replace(oldStr, newStr);
+        auto old_str = Dynamic_array<T>(oldStr->getLength());
+        for (int i = 0; i < oldStr->getLength(); i++)
+            old_str[i] = oldStr->get(i);
+        auto new_str = Dynamic_array<T>(newStr->getLength());
+        for (int i = 0; i < newStr->getLength(); i++)
+            new_str[i] = newStr->get(i);
+        return new ArraySequence<T>(data.replace(new Dynamic_array<T>(old_str), new Dynamic_array<T>(new_str)));
     }
 
     void append(T &item) override
@@ -105,7 +117,10 @@ public:
 
     Sequence<T> *concat(Sequence<T> *second_str) override
     {
-        return data.concat(second_str);
+        auto sec_str = Dynamic_array<T>(second_str->getLength());
+        for (int i = 0; i < second_str->getLength(); i++)
+            sec_str[i] = second_str->get(i);
+        return new ArraySequence<T>(data.concat(sec_str));
     }
 
 

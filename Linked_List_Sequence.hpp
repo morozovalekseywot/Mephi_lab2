@@ -76,7 +76,7 @@ public:
         return data.concat(second_str);
     }
 
-    int find(Sequence<T> &subStr, int begin, int end) const override
+    int find(Sequence<T> *subStr, int begin, int end) const override
     {
         return data.find(subStr, begin, end);
         /*
@@ -87,7 +87,7 @@ public:
         */
     }
 
-    int rfind(Sequence<T> &subStr, int begin, int end) const override
+    int rfind(Sequence<T> *subStr, int begin, int end) const override
     {
         return data.rfind(subStr, begin, end);
         /*
@@ -98,7 +98,7 @@ public:
         */
     }
 
-    Sequence<T> *replace(Sequence<T> &oldStr, Sequence<T> &newStr) const override
+    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) const override
     {
         return data.replace(oldStr, newStr);
     }

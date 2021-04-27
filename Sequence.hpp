@@ -41,13 +41,13 @@ public:
     virtual void print() = 0;
 
     /// поиск первого вхождения подстроки в строке между begin и end, если её нет вернёт end
-    virtual int find(Sequence<T> &subStr, int begin, int end) const = 0;
+    virtual int find(Sequence<T> *subStr, int begin, int end) const = 0;
 
     /// поиск последнего вхождения подстроки в строке между begin и end, если её нет вернёт end
-    virtual int rfind(Sequence<T> &subStr, int begin, int end) const = 0;
+    virtual int rfind(Sequence<T> *subStr, int begin, int end) const = 0;
 
     /// замена всех вхождений подстроки на новую строку
-    virtual Sequence<T> *replace(Sequence<T> &oldStr, Sequence<T> &newStr) const = 0;
+    virtual Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) const = 0;
 
     /// Деструктор
     virtual ~Sequence<T>() = default;

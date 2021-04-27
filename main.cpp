@@ -10,6 +10,6 @@ int main()
     my[2] = 's';
 
     Cstring<char> s(my, 3);
-
+    s.print();
     return 0;
 }

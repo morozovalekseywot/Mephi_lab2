@@ -207,7 +207,7 @@ Dynamic_array<T> &Dynamic_array<T>::substr(int begin, int end) const
 }
 
 template<class T>
-Dynamic_array<T> &Dynamic_array<T>::concat(Dynamic_array<T> *array) const
+Dynamic_array<T> &Dynamic_array<T>::concat(Dynamic_array<T> &array) const
 {
     auto *res = new Dynamic_array<T>(m_size + array->m_size);
     for (int i = 0; i < m_size; i++)
