@@ -4,5 +4,5 @@ project(Cstring)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "-Ox")
 
-add_executable(Cstring main.cpp Sequence.hpp Linked_List.hpp Dynamic_array.hpp Linked_List.cpp Dynamic_array.cpp
-         Array_Sequence.hpp Sequence.hpp Linked_List_Sequence.hpp Cstring.hpp)
+add_executable(Cstring main.cpp Sequence.hpp Linked_List.hpp Dynamic_array.hpp
+        Array_Sequence.hpp Sequence.hpp Linked_List_Sequence.hpp Cstring.hpp)

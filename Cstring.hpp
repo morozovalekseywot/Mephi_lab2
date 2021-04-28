@@ -3,39 +3,41 @@
 #include "Linked_List_Sequence.hpp"
 #include "Array_Sequence.hpp"
 
-template<class T, class basis = ArraySequence<T>>
+using namespace std;
+
+template<class T>
 class Cstring
 {
-    basis symbols;
+    Sequence<T> *symbols;
 public:
     Cstring() : symbols()
     {};
 
-    Cstring(T *items, int count) : symbols(items, count)
+    explicit Cstring(Sequence<T> *sequence) : symbols(sequence)
     {};
 
     /// получить длину строки
-    [[nodiscard]] int getLen() const
+    [[nodiscard]] int getLength() const
     {
-        return symbols.getLen();
+        return symbols->getLength();
     }
 
     /// получение первого элемента
     T getFirst() const
     {
-        return symbols.getFirst();
+        return symbols->getFirst();
     }
 
     /// получение последнего элемента
     T getLast() const
     {
-        return symbols.getLast();
+        return symbols->getLast();
     }
 
     /// получение элемента по индексу
     T get(int index) const
     {
-        return symbols.get(index);
+        return symbols->get(index);
     }
 
     /// получение значения
@@ -53,31 +55,31 @@ public:
     /// вставка элемента в конец
     void append(T &item)
     {
-        symbols.append(item);
+        symbols->append(item);
     }
 
     /// вставка элемента в начало
     void prepend(T &item)
     {
-        symbols.prepend(item);
+        symbols->prepend(item);
     }
 
     /// вставка элемента по индексу
     void insert(T &item, int index)
     {
-        symbols.insert(item, index);
+        symbols->insert(item, index);
     }
 
     /// получение substr с begin до end
-    Cstring<T, basis> *substr(int begin, int end) const
+    Cstring<T> *substr(int begin, int end) const
     {
-        return Cstring<T,basis>((symbols.substr(begin, end)).data,(symbols.substr(begin, end))->getLength);
+        return new Cstring<T>((symbols->substr(begin, end)));
     }
 
     /// поиск первого вхождения подстроки в строке между begin и end, если её нет вернёт -1
-    int find(Cstring<T, basis> &subStr, int begin = 0, int end = -1) const
+    int find(Cstring<T> &subStr, int begin = 0, int end = -1) const
     {
-        int i = symbols.find(subStr, begin, end);
+        int i = symbols->find(subStr.symbols, begin, end);
         if (i != end)
             return i;
         else
@@ -85,9 +87,9 @@ public:
     }
 
     /// поиск последнего вхождения подстроки в строке между begin и end, если её нет вернёт -1
-    int rfind(Cstring<T, basis> &subStr, int begin = 0, int end = -1) const
+    int rfind(Cstring<T> &subStr, int begin = 0, int end = -1) const
     {
-        int i = symbols.rfind(subStr, begin, end);
+        int i = symbols->rfind(subStr.symbols, begin, end);
         if (i != end)
             return i;
         else
@@ -95,28 +97,35 @@ public:
     }
 
     /// Соединение двух строк
-    Cstring<T, basis> *concat(Cstring<T, basis> *second_str)
+    Cstring<T> *concat(Cstring<T> &second_str)
     {
-        return symbols.concat(second_str);
+        return new Cstring<T>(symbols->concat(second_str.symbols));
     }
 
     /// замена всех вхождений подстроки на новую строку
-    Cstring<T, basis> *replace(Cstring<T, basis> &oldStr, Cstring<T, basis> &newStr) const
+    Cstring<T> *replace(Cstring<T> &oldStr, Cstring<T> &newStr) const
     {
-        return symbols.replace(oldStr, newStr);
+        return new Cstring<T>(symbols->replace(oldStr.symbols, newStr.symbols));
     }
 
     /// печать
     void print()
     {
-        symbols.print();
+        symbols->print();
     }
-    /*
+
     /// Деструктор
     ~Cstring()
     {
         delete symbols;
     }
-    */
 };
+
+template<class T>
+ostream &operator<<(std::ostream &os, const Cstring<T> &a)
+{
+    for (int i = 0; i < a.getLength(); i++)
+        os << a.get(i);
+    return os;
+}
 

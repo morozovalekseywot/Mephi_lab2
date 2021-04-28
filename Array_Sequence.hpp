@@ -11,16 +11,24 @@ private:
     Dynamic_array<T> data;
 public:
     /// Копирование элементов из переданного массива
-    ArraySequence(T *data, int count) : data(data, count)
+    ArraySequence(T *items, int count) : data(items, count)
     {}
 
     /// Создание пустого массива
     ArraySequence() : data()
     {};
 
+    explicit ArraySequence(int size) : data(size)
+    {};
+
     /// Копирующий конструктор
     explicit ArraySequence(Dynamic_array<T> &array) : data(array)
     {};
+
+    void resize(int size)
+    {
+        data.resize(size);
+    }
 
     T getFirst() const override
     {
@@ -47,13 +55,24 @@ public:
         return data.get(i);
     }
 
-    Sequence<T> *substr(int begin, int end) const override
+    Sequence<T> *substr(int begin, int end) override
     {
-        /*
-        auto *sub = new ArraySequence<T>(Dynamic_array<T>(data.substr(begin, end)));
-        return sub;
-         */
-        return new ArraySequence<T>(data.substr(begin, end));
+        if (begin < 0 || end < 0 || begin > end)
+        {
+            if (begin > end)
+                throw invalid_argument("In function substring begin < end");
+            else
+                throw out_of_range("In function substring begin or end < 0");
+        }
+        if (end > data.size())
+            throw out_of_range("In function substring end>size");
+        auto *subArray = new ArraySequence<T>(end - begin);
+        for (int i = begin; i < end; i++)
+        {
+            (*subArray)[i-begin] = data[i];
+        }
+        return subArray;
+        //return new ArraySequence<T>(data.substr(begin, end));
     }
 
     [[nodiscard]] int getLength() const override
@@ -63,41 +82,70 @@ public:
 
     int find(Sequence<T> *subStr, int begin, int end) const override
     {
-        auto sub =  Dynamic_array<T>(subStr->getLength());
-        for (int i = 0; i < subStr->getLength(); i++)
-            sub[i] = subStr->get(i);
-        return data.find(sub, begin, end);
-        /*
-        if (i != end)
-            return i;
+        if (end == -1)
+            end = data.size();
         else
-            return -1;
-        */
+            end = min(end, data.size());
+        if (subStr->getLength() > end - begin || subStr->getLength() == 0)
+            return end;
+        for (int index = begin; index < end; index++)
+        {
+            int j = 0, i = index;
+            while (j < subStr->getLength() && i < end && data[i] == (*subStr)[j])
+            {
+                i++;
+                j++;
+            }
+            if (j == subStr->getLength())
+                return index;
+        }
+        return end;
     }
 
     int rfind(Sequence<T> *subStr, int begin, int end) const override
     {
-        auto sub = Dynamic_array<T>(subStr->getLength());
-        for (int i = 0; i < subStr->getLength(); i++)
-            sub[i] = subStr->get(i);
-        return data.rfind(sub, begin, end);
-        /*
-        if (i != end)
-            return i;
+        if (end == -1)
+            end = getLength();
         else
-            return -1;
-        */
+            end = min(end, getLength());
+        if (subStr->getLength() > end - begin || subStr->getLength() == 0)
+            return end;
+        for (int index = end - 1; index >= begin; index--)
+        {
+            int j = subStr->getLength()-1, i = index;
+            while (j >= 0 && i >= begin && data[i] == (*subStr)[j])
+            {
+                i--;
+                j--;
+            }
+            if (j == -1)
+                return i + 1; // индекс на первый элемент строки
+        }
+        return end;
     }
 
-    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) const override
+    void set(int index, T &item) override
     {
-        auto old_str = Dynamic_array<T>(oldStr->getLength());
-        for (int i = 0; i < oldStr->getLength(); i++)
-            old_str[i] = oldStr->get(i);
-        auto new_str = Dynamic_array<T>(newStr->getLength());
-        for (int i = 0; i < newStr->getLength(); i++)
-            new_str[i] = newStr->get(i);
-        return new ArraySequence<T>(data.replace(new Dynamic_array<T>(old_str), new Dynamic_array<T>(new_str)));
+        data.set(index, item);
+    }
+
+    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) override
+    {
+        if (oldStr == newStr || oldStr->getLength() == 0)
+            return this;
+        auto *Str = new ArraySequence<T>(data.size() * newStr->getLength() / oldStr->getLength() + data.size());
+        int it = 0;
+        for (int index = 0; index < data.size();)
+        {
+            int i = find(oldStr, index, -1);
+            for (int j = index; j < i; j++)
+                (*Str)[it++] = data[j];
+            for (int j = 0; j < newStr->getLength(); j++)
+                (*Str)[it++] = (*newStr)[j];
+            index += i-index + oldStr->getLength();
+        }
+        Str->resize(it + 1);
+        return Str;
     }
 
     void append(T &item) override
@@ -117,10 +165,14 @@ public:
 
     Sequence<T> *concat(Sequence<T> *second_str) override
     {
-        auto sec_str = Dynamic_array<T>(second_str->getLength());
+        auto *res = new ArraySequence<T>(this->data);
+
+        res->data.resize(getLength() + second_str->getLength());
         for (int i = 0; i < second_str->getLength(); i++)
-            sec_str[i] = second_str->get(i);
-        return new ArraySequence<T>(data.concat(sec_str));
+        {
+            (*res)[getLength() + i] = second_str->get(i);
+        }
+        return res;
     }
 
 
