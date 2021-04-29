@@ -16,11 +16,16 @@ public:
     /// установка значения по индексу
     virtual void set(int index, T &item) = 0;
 
+    /// изменение размера
+    virtual void resize(int size) = 0;
+
     /// получение значения
     virtual T operator[](int i) const = 0;
 
     /// присвоение значения
     virtual T &operator[](int i) = 0;
+
+    //virtual Sequence<T> &operator=(const Sequence<T> *sequence) = 0;
 
     /// получить длину строки
     [[nodiscard]] virtual int getLength() const = 0;

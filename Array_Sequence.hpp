@@ -25,7 +25,7 @@ public:
     explicit ArraySequence(Dynamic_array<T> &array) : data(array)
     {};
 
-    void resize(int size)
+    void resize(int size) override
     {
         data.resize(size);
     }
@@ -54,7 +54,15 @@ public:
     {
         return data.get(i);
     }
-
+    /*
+    Sequence<T> &operator=(const Sequence<T> *sequence) override
+    {
+        resize(sequence->getLength());
+        for (int i = 0; i < getLength(); i++)
+            data[i] = (*sequence)[i];
+        return *this;
+    }
+    */
     Sequence<T> *substr(int begin, int end) override
     {
         if (begin < 0 || end < 0 || begin > end)
@@ -69,7 +77,7 @@ public:
         auto *subArray = new ArraySequence<T>(end - begin);
         for (int i = begin; i < end; i++)
         {
-            (*subArray)[i-begin] = data[i];
+            (*subArray)[i - begin] = data[i];
         }
         return subArray;
         //return new ArraySequence<T>(data.substr(begin, end));
@@ -112,7 +120,7 @@ public:
             return end;
         for (int index = end - 1; index >= begin; index--)
         {
-            int j = subStr->getLength()-1, i = index;
+            int j = subStr->getLength() - 1, i = index;
             while (j >= 0 && i >= begin && data[i] == (*subStr)[j])
             {
                 i--;
@@ -142,7 +150,7 @@ public:
                 (*Str)[it++] = data[j];
             for (int j = 0; j < newStr->getLength(); j++)
                 (*Str)[it++] = (*newStr)[j];
-            index += i-index + oldStr->getLength();
+            index += i - index + oldStr->getLength();
         }
         Str->resize(it + 1);
         return Str;

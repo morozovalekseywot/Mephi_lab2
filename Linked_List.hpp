@@ -134,7 +134,7 @@ public:
     T &get(int index) const
     {
         if (index < 0 || index >= getLength())
-            throw out_of_range("Index out of range");
+            throw out_of_range("Index out of range in function get");
         int j = 0;
         for (Node<T> *node = first; node != nullptr; node = node->next)
         {
@@ -147,7 +147,7 @@ public:
     void set(int index, T &item)
     {
         if (index < 0 || index >= getLength())
-            throw out_of_range("Index out of range");
+            throw out_of_range("Index out of range in function set");
         int j = 0;
         for (Node<T> *node = first; node != nullptr; node = node->next)
         {
@@ -207,7 +207,7 @@ public:
     void insert(T &item, int index)
     {
         if (index < 0 || index >= getLength())
-            throw out_of_range("Index out of range");
+            throw out_of_range("Index out of range in function insert");
         Node<T> *it = first;
         for (int i = 0; i < index - 1; i++)
             it = it->next;

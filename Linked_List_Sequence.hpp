@@ -21,7 +21,7 @@ public:
     explicit Linked_List_Sequence(const Linked_List<T> &list) : data(new Linked_List<T>(list))
     {};
 
-    void resize(int size)
+    void resize(int size) override
     {
         data.resize(size);
     }

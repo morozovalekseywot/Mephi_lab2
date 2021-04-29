@@ -10,9 +10,6 @@ class Cstring
 {
     Sequence<T> *symbols;
 public:
-    Cstring() : symbols()
-    {};
-
     explicit Cstring(Sequence<T> *sequence) : symbols(sequence)
     {};
 
@@ -43,13 +40,21 @@ public:
     /// получение значения
     T operator[](int i) const
     {
-        return symbols[i];
+        return (*symbols)[i];
     }
 
     /// присвоение значения
     T &operator[](int i)
     {
-        return symbols[i];
+        return (*symbols)[i];
+    }
+
+    Cstring<T> &operator=(const Cstring<T> &cstring)
+    {
+        symbols->resize(cstring.getLength());
+        for (int i = 0; i < getLength(); i++)
+            (*symbols)[i] = cstring[i];
+        return *this;
     }
 
     /// вставка элемента в конец
