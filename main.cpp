@@ -43,7 +43,7 @@ void test()
 
 int main()
 {
-    /*
+
     char *my = new char[6];
     my = "helpMe";
     char *Sub = new char[2];
@@ -64,7 +64,7 @@ int main()
     Cstring<char> futur(fut);
     Cstring<char> rep = *ans.replace(help, futur);
     cout << R"(replace "help" on "futur": )" << rep;
-     */
-    test();
+    (*fut)[0] = 'a';
+    cout<<"\n"<<futur;
     return 0;
 }
