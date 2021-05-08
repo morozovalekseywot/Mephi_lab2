@@ -123,6 +123,7 @@ public:
     ~Cstring()
     {
         delete symbols;
+        symbols = nullptr;
     }
 };
 

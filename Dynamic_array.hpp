@@ -22,7 +22,7 @@ public:
         str = NULL;
     }
 
-    Dynamic_array(Dynamic_array<T> &array)
+    Dynamic_array(const Dynamic_array<T> &array)
     {
         m_size = array.size();
         capacity = m_size;
@@ -104,7 +104,7 @@ public:
     }
 
     /// вставка элемента по индексу
-    void insert(T &item, int &i)
+    void insert(T &item, int i)
     {
         if (i < 0 || i > m_size)
             throw out_of_range("Index out of range in function insert");

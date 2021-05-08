@@ -1,49 +1,24 @@
-#include "Cstring.hpp"
-#include <chrono>
+#include "tests.h"
 
 using namespace std;
 #define N 30000
 #define loop(i, n) for(int i=0;i<n;++i)
 
-void test()
+void write(pair<double, double> time, const char *funcname)
 {
-    char *seq = new char[8];
-    seq = "Sequence";
-    /*
-    char *list_seq = new char[8];
-    list_seq = "Sequence";
-     */
-    //auto *array = new ArraySequence<char>(seq, 14);
-    //auto *list = new Linked_List_Sequence<char>(list_seq, 4);
-    Cstring<char> array(new ArraySequence<char>(seq, 8));
-    Cstring<char> list(new Linked_List_Sequence<char>(seq, 8));
-    Cstring<char> subList(new Linked_List_Sequence<char>(seq, 8));
-    Cstring<char> subArray(new ArraySequence<char>(seq, 8));
-    auto begin_array = std::chrono::steady_clock::now();
-    loop(i, 100*N)
-    {
-        //array = *array.concat(subArray);
-        array.concat(subArray);
-    }
-    cout<<array.getLength()<<"\n";
-    auto end_array = std::chrono::steady_clock::now();
-    auto elapsed_mcs_array = std::chrono::duration_cast<std::chrono::microseconds>(end_array - begin_array);
-    std::cout << "\nArray: --- " << elapsed_mcs_array.count() / 1e6 << " seconds ---\n";
-    auto begin_list = std::chrono::steady_clock::now();
-    loop(i, 100*N)
-    {
-        //list = *list.concat(subList);
-        list.concat(subList);
-    }
-    cout<<list.getLength()<<"\n";
-    auto end_list = std::chrono::steady_clock::now();
-    auto elapsed_mcs_list = std::chrono::duration_cast<std::chrono::microseconds>(end_list - begin_list);
-    std::cout << "\nList: --- " << elapsed_mcs_list.count() / 1e6 << " seconds ---\n";
+    ofstream file("Compare.txt", std::ios_base::app);
+    file << funcname << "\n";
+    file << time.first << " " << time.second << " ";
+    if (time.first < time.second)
+        file << "\nArray better is " << ceil(time.second / time.first) << " times faster than a Linked_List\n";
+    else
+        file << "\nLinked_List better is " << ceil(time.first / time.second) << " times faster than a Array\n";
+    file.close();
 }
 
 int main()
 {
-
+    /*
     char *my = new char[6];
     my = "helpMe";
     char *Sub = new char[2];
@@ -64,7 +39,16 @@ int main()
     Cstring<char> futur(fut);
     Cstring<char> rep = *ans.replace(help, futur);
     cout << R"(replace "help" on "futur": )" << rep;
-    (*fut)[0] = 'a';
-    cout<<"\n"<<futur;
+     */
+    ofstream file("Compare.txt", ios_base::trunc);
+    file << "time array,time Linked_List\n";
+    file.close();
+    write(test_concat(), "Concat");
+    write(test_insert(), "Insert");
+    write(test_prepend(), "Prepend");
+    write(test_append(), "Append");
+    write(test_substr(), "Substr");
+    write(test_find(), "Find");
+    write(test_get(),"Get");
     return 0;
 }

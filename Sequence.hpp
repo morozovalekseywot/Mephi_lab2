@@ -40,10 +40,10 @@ public:
     virtual void insert(T &item, int index) = 0;
 
     /// получение substr с begin до end
-    virtual Sequence<T> *substr(int begin, int end) = 0;
+    virtual Sequence<T> *substr(int begin, int end) const = 0;
 
     /// Соединение двух строк
-    virtual Sequence<T> *concat(Sequence<T> *second_str) = 0;
+    virtual Sequence<T> *concat(Sequence<T> *second_str) const = 0;
 
     /// Вывод строки
     virtual void print() = 0;
@@ -55,7 +55,7 @@ public:
     virtual int rfind(Sequence<T> *subStr, int begin, int end) const = 0;
 
     /// замена всех вхождений подстроки на новую строку
-    virtual Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) = 0;
+    virtual Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) const = 0;
 
     /// Деструктор
     virtual ~Sequence<T>() = default;

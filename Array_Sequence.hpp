@@ -22,7 +22,7 @@ public:
     {};
 
     /// Копирующий конструктор
-    explicit ArraySequence(Dynamic_array<T> &array) : data(array)
+    explicit ArraySequence(const Dynamic_array<T> &array) : data(array)
     {};
 
     void resize(int size) override
@@ -63,7 +63,7 @@ public:
         return *this;
     }
     */
-    Sequence<T> *substr(int begin, int end) override
+    Sequence<T> *substr(int begin, int end) const override
     {
         if (begin < 0 || end < 0 || begin > end)
         {
@@ -137,10 +137,10 @@ public:
         data.set(index, item);
     }
 
-    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) override
+    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) const override
     {
         if (oldStr == newStr || oldStr->getLength() == 0)
-            return this;
+            return new ArraySequence<T>(*this);
         auto *Str = new ArraySequence<T>(data.size() * newStr->getLength() / oldStr->getLength() + data.size());
         int it = 0;
         for (int index = 0; index < data.size();)
@@ -171,7 +171,7 @@ public:
         data.insert(item, index);
     }
 
-    Sequence<T> *concat(Sequence<T> *second_str) override
+    Sequence<T> *concat(Sequence<T> *second_str) const override
     {
         auto *res = new ArraySequence<T>(this->data);
 

@@ -76,7 +76,7 @@ public:
         data.insert(item, index);
     }
 
-    Sequence<T> *concat(Sequence<T> *second_str) override
+    Sequence<T> *concat(Sequence<T> *second_str) const override
     {
         auto *res = new Linked_List_Sequence<T>(*this);
         for (int i = 0; i < second_str->getLength(); i++)
@@ -144,10 +144,10 @@ public:
         return end;
     }
 
-    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) override
+    Sequence<T> *replace(Sequence<T> *oldStr, Sequence<T> *newStr) const override
     {
         if (oldStr->getLength() == 0)
-            return this;
+            return new Linked_List_Sequence<T>(*this);
         auto *Str = new Linked_List_Sequence<T>(*this);
         Str->resize(getLength() * newStr->getLength() / oldStr->getLength() + getLength());
         int it = 0;
@@ -170,7 +170,7 @@ public:
         return Str;
     }
 
-    Sequence<T> *substr(int begin, int end) override
+    Sequence<T> *substr(int begin, int end) const override
     {
         if (begin < 0 || end < 0 || begin > end)
         {
