@@ -1,4 +1,4 @@
-#include "tests.h"
+﻿#include "tests.h"
 
 using namespace std;
 #define N 30000
@@ -48,7 +48,7 @@ int main()
     write(test_prepend(), "Prepend");
     write(test_append(), "Append");
     write(test_substr(), "Substr");
-    write(test_find(), "Find");
-    write(test_get(),"Get");
+    //write(test_find(), "Find");
+    //write(test_get(),"Get");
     return 0;
 }

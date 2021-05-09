@@ -1,3 +1,4 @@
+﻿#pragma once
 #include "Cstring.hpp"
 #include <chrono>
 #include <utility>
@@ -5,9 +6,9 @@
 #include <cassert>
 
 using namespace std;
-#define N 30000
+#define N 500
 #define loop(i, n) for(int i=0;i<n;++i)
-#define assert_eq(l, r) assert(l-r)
+#define assert_eq(l, r) assert(l==r)
 
 char *build(int n = N)
 {
@@ -47,6 +48,8 @@ pair<double, double> test_concat()
     auto end_list = chrono::steady_clock::now();
     auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
+     //cout<<array.getLength()<<" "<<list.getLength()<<"\n";
+    assert_eq(array.getLength(),list.getLength());
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -75,6 +78,8 @@ pair<double, double> test_insert()
     //cout << "\n" << list.getLength() << "\n" << list;
     auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
+     //cout<<array.getLength()<<" "<<list.getLength()<<"\n";
+    assert_eq(array.getLength(),list.getLength());
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -103,6 +108,8 @@ pair<double, double> test_prepend()
     //cout << "\n" << list.getLength() << "\n" << list;
     auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
+    //cout<<array.getLength()<<" "<<list.getLength()<<"\n";
+    assert_eq(array.getLength(),list.getLength());
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -131,34 +138,36 @@ pair<double, double> test_append()
     //cout << "\n" << list.getLength() << "\n" << list;
     auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
+    assert_eq(array.getLength(),list.getLength());
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
 pair<double, double> test_substr()
 {
-    char *seq = build();
-    Cstring<char> array(new ArraySequence<char>(seq, N));
-    Cstring<char> list(new Linked_List_Sequence<char>(seq, N));
+    char *seq = build(N/2);
+    Cstring<char> array(new ArraySequence<char>(seq, N/2));
+    Cstring<char> list(new Linked_List_Sequence<char>(seq, N/2));
     auto begin_array = chrono::steady_clock::now();
     loop(i, N / 100)
     {
-        array.substr(N / 4, 3 * N / 4);
+        array.substr(N / 8, 3 * N / 8);
     }
     auto end_array = chrono::steady_clock::now();
-    assert_eq((array.substr(N / 4, 3 * N / 4))->getLength(), 3 * N / 4 - N / 4 + 1);
+    //assert_eq((array.substr(N / 8, 3 * N / 8))->getLength(), 3 * N / 8 - N / 8 + 1);
     //cout << "\n" << array.getLength() << "\n" << array;
     auto elapsed_mcs_array = chrono::duration_cast<chrono::microseconds>(end_array - begin_array);
     //cout << "\nArray: --- " << elapsed_mcs_array.count() / 1e3 << " miliseconds ---\n";
     auto begin_list = chrono::steady_clock::now();
     loop(i, N / 100)
     {
-        list.substr(N / 4, 3 * N / 4);
+        list.substr(N / 8, 3 * N / 8);
     }
     auto end_list = chrono::steady_clock::now();
-    assert_eq((list.substr(N / 4, 3 * N / 4))->getLength(), 3 * N / 4 - N / 4 + 1);
+    assert_eq((list.substr(N / 8, 3 * N / 8))->getLength(), 3 * N / 8 - N / 8 + 1);
     //cout << "\n" << list.getLength() << "\n" << list;
     auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
+    assert_eq(array.getLength(),list.getLength());
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -188,6 +197,7 @@ pair<double, double> test_find()
     //cout << "\n" << list.getLength() << "\n" << list;
     auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
+    assert_eq(array.getLength(),list.getLength());
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -206,13 +216,14 @@ pair<double, double> test_get()
     auto elapsed_mcs_array = chrono::duration_cast<chrono::microseconds>(end_array - begin_array);
     //cout << "\nArray: --- " << elapsed_mcs_array.count() / 1e3 << " miliseconds ---\n";
     auto begin_list = chrono::steady_clock::now();
-    loop(i, N)
+    loop(i, N/10)
     {
         list[i];
     }
     auto end_list = chrono::steady_clock::now();
     //cout << "\n" << list.getLength() << "\n" << list;
-    auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
+    auto elapsed_mcs_list = 10*chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
+    assert_eq(array.getLength(),list.getLength());
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }

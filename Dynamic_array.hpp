@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <iostream>
 #include <algorithm>
@@ -100,7 +100,6 @@ public:
         for (int j = m_size; j > 0; j--)
             str[j] = str[j - 1];
         str[0] = item;
-        m_size++;
     }
 
     /// вставка элемента по индексу
