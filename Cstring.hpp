@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Linked_List_Sequence.hpp"
 #include "Array_Sequence.hpp"
@@ -75,7 +75,7 @@ public:
         symbols->insert(item, index);
     }
 
-    /// получение substr с begin до end
+    /// получение substr с begin до end, end указывает на элемент после последнего
     Cstring<T> *substr(int begin, int end) const
     {
         return new Cstring<T>((symbols->substr(begin, end)));

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <iostream>
 #include <algorithm>
@@ -206,8 +206,13 @@ public:
     /// вставка элемента по индексу
     void insert(T &item, int index)
     {
-        if (index < 0 || index >= getLength())
+        if (index < 0 || index > getLength())
             throw out_of_range("Index out of range in function insert");
+        if(index == 0)
+        {
+        	prepend(item);
+        	return;
+        }
         Node<T> *it = first;
         for (int i = 0; i < index - 1; i++)
             it = it->next;

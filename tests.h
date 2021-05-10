@@ -153,7 +153,6 @@ pair<double, double> test_substr()
         array.substr(N / 8, 3 * N / 8);
     }
     auto end_array = chrono::steady_clock::now();
-    //assert_eq((array.substr(N / 8, 3 * N / 8))->getLength(), 3 * N / 8 - N / 8 + 1);
     //cout << "\n" << array.getLength() << "\n" << array;
     auto elapsed_mcs_array = chrono::duration_cast<chrono::microseconds>(end_array - begin_array);
     //cout << "\nArray: --- " << elapsed_mcs_array.count() / 1e3 << " miliseconds ---\n";
@@ -163,8 +162,7 @@ pair<double, double> test_substr()
         list.substr(N / 8, 3 * N / 8);
     }
     auto end_list = chrono::steady_clock::now();
-    assert_eq((list.substr(N / 8, 3 * N / 8))->getLength(), 3 * N / 8 - N / 8 + 1);
-    //cout << "\n" << list.getLength() << "\n" << list;
+    cout << "\n" << list.getLength() << "\n" << list;
     auto elapsed_mcs_list = chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
     assert_eq(array.getLength(),list.getLength());

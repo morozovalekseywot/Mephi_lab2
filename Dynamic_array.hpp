@@ -105,7 +105,7 @@ public:
     /// вставка элемента по индексу
     void insert(T &item, int i)
     {
-        if (i < 0 || i > m_size)
+        if (i < 0 || i >= m_size)
             throw out_of_range("Index out of range in function insert");
         resize(m_size + 1);
         for (int j = m_size; j > i; j--)

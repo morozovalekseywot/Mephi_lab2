@@ -18,7 +18,7 @@ void write(pair<double, double> time, const char *funcname)
 
 int main()
 {
-    /*
+    
     char *my = new char[6];
     my = "helpMe";
     char *Sub = new char[2];
@@ -39,7 +39,13 @@ int main()
     Cstring<char> futur(fut);
     Cstring<char> rep = *ans.replace(help, futur);
     cout << R"(replace "help" on "futur": )" << rep;
-     */
+    cout<<endl;
+    char p='w';
+    futur.insert(p,0);
+    futur.insert(p,1);
+    futur.insert(p,futur.getLength());
+    cout<<futur;
+    /*
     ofstream file("Compare.txt", ios_base::trunc);
     file << "time array,time Linked_List\n";
     file.close();
@@ -50,5 +56,6 @@ int main()
     write(test_substr(), "Substr");
     //write(test_find(), "Find");
     //write(test_get(),"Get");
+    */
     return 0;
 }
