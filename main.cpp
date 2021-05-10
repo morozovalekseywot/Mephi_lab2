@@ -1,7 +1,6 @@
 ﻿#include "tests.h"
 
 using namespace std;
-#define N 30000
 #define loop(i, n) for(int i=0;i<n;++i)
 
 void write(pair<double, double> time, const char *funcname)
@@ -10,15 +9,15 @@ void write(pair<double, double> time, const char *funcname)
     file << funcname << "\n";
     file << time.first << " " << time.second << " ";
     if (time.first < time.second)
-        file << "\nArray better is " << ceil(time.second / time.first) << " times faster than a Linked_List\n";
+        file << "\nArray better is " << round(time.second / time.first) << " times faster than a Linked_List\n";
     else
-        file << "\nLinked_List better is " << ceil(time.first / time.second) << " times faster than a Array\n";
+        file << "\nLinked_List better is " << round(time.first / time.second) << " times faster than a Array\n";
     file.close();
 }
 
 int main()
 {
-    
+    /*
     char *my = new char[6];
     my = "helpMe";
     char *Sub = new char[2];
@@ -45,17 +44,17 @@ int main()
     futur.insert(p,1);
     futur.insert(p,futur.getLength());
     cout<<futur;
-    /*
+     */
     ofstream file("Compare.txt", ios_base::trunc);
-    file << "time array,time Linked_List\n";
+    file << "Function name\ntime array time Linked_List\n";
     file.close();
     write(test_concat(), "Concat");
     write(test_insert(), "Insert");
     write(test_prepend(), "Prepend");
     write(test_append(), "Append");
     write(test_substr(), "Substr");
-    //write(test_find(), "Find");
-    //write(test_get(),"Get");
-    */
+    write(test_find(), "Find");
+    write(test_get(), "Get");
+    write(test_replace(), "Replace");
     return 0;
 }

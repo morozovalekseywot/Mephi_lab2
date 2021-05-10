@@ -163,10 +163,12 @@ public:
             for (int j = 0; j < newStr->getLength(); j++)
                 (*Str)[it++] = (*newStr)[j];
             index += i - index + oldStr->getLength();
+            if(index>=getLength())
+                break;
             for (int j = 0; j < oldStr->getLength(); j++)
                 now = now->next;
         }
-        Str->resize(it + 1);
+        Str->resize(it);
         return Str;
     }
 
@@ -185,7 +187,7 @@ public:
         for (int i = 0; i < begin && now != nullptr; i++)
             now = now->next;
         auto *subList = new Linked_List_Sequence<T>();
-        for (int i = begin; i <= end; i++)
+        for (int i = begin; i < end; i++)
         {
             subList->append(now->value);
             now = now->next;

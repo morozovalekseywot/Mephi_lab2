@@ -152,7 +152,7 @@ public:
                 (*Str)[it++] = (*newStr)[j];
             index += i - index + oldStr->getLength();
         }
-        Str->resize(it + 1);
+        Str->resize(it);
         return Str;
     }
 

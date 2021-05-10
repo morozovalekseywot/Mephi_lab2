@@ -85,7 +85,7 @@ public:
     int find(Cstring<T> &subStr, int begin = 0, int end = -1) const
     {
         int i = symbols->find(subStr.symbols, begin, end);
-        if (i != end)
+        if (i != getLength())
             return i;
         else
             return -1;
