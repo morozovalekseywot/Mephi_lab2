@@ -77,7 +77,7 @@ public:
         {
             int new_capacity = size * 2;
             T *new_data = new T[new_capacity];
-            memcpy(new_data, str, sizeof(T) * size);
+            memcpy(new_data, str, sizeof(T) * m_size);
             delete[] str;
             str = new_data;
             capacity = new_capacity;
@@ -97,7 +97,7 @@ public:
     void prepend(T &item)
     {
         resize(m_size + 1);
-        for (int j = m_size; j > 0; j--)
+        for (int j = m_size-1; j > 0; j--)
             str[j] = str[j - 1];
         str[0] = item;
     }
@@ -108,7 +108,7 @@ public:
         if (i < 0 || i >= m_size)
             throw out_of_range("Index out of range in function insert");
         resize(m_size + 1);
-        for (int j = m_size; j > i; j--)
+        for (int j = m_size-1; j > i; j--)
             str[j] = str[j - 1];
         str[i] = item;
     }
