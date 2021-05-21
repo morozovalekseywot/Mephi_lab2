@@ -75,7 +75,7 @@ public:
             throw bad_array_new_length();//"Dynamic_array::resize error,new size<0"
         if (size > capacity)
         {
-            int new_capacity = size*2;
+            int new_capacity = size * 2;
             T *new_data = new T[new_capacity];
             memcpy(new_data, str, sizeof(T) * size);
             delete[] str;

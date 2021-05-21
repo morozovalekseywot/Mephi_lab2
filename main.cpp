@@ -45,6 +45,7 @@ int main()
     futur.insert(p,futur.getLength());
     cout<<futur;
      */
+
     ofstream file("Compare.txt", ios_base::trunc);
     file << "Function name\ntime array time Linked_List\n";
     file.close();

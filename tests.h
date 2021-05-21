@@ -100,14 +100,14 @@ pair<double, double> test_prepend()
     Cstring<char> list(new Linked_List_Sequence<char>(seq, 8));
     auto begin_array = chrono::steady_clock::now();
     char p = 'I';
-    loop(i, N / 100)
+    loop(i, N / 2)
     {
         array.prepend(p);
     }
     auto end_array = chrono::steady_clock::now();
     auto elapsed_mcs_array = chrono::duration_cast<chrono::microseconds>(end_array - begin_array);
     auto begin_list = chrono::steady_clock::now();
-    loop(i, N / 100)
+    loop(i, N / 2)
     {
         list.prepend(p);
     }
