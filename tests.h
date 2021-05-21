@@ -60,6 +60,7 @@ pair<double, double> test_concat()
     for (int i = subLs.getLength() / 2; i < subLs.getLength(); i++)
         assert(subLs[i] == subLs[i - subLs.getLength() / 2]);
     assert_eq(array.getLength(), list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -89,6 +90,7 @@ pair<double, double> test_insert()
     for (int i = 8; i < list.getLength() - 4; i++)
         assert(list[i] == p);
     assert_eq(array.getLength(), list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -118,6 +120,7 @@ pair<double, double> test_prepend()
     for (int i = 8; i < list.getLength() - 8; i++)
         assert(list[i] == p);
     assert_eq(array.getLength(), list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -147,6 +150,7 @@ pair<double, double> test_append()
     for (int i = 8; i < list.getLength(); i++)
         assert(list[i] == p);
     assert_eq(array.getLength(), list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -181,6 +185,7 @@ pair<double, double> test_substr()
         assert(subList[i] == list[i + N / 8]);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
     assert_eq(array.getLength(), list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -214,6 +219,7 @@ pair<double, double> test_find()
     for (int i = 0; i < subList.getLength(); i++)
         assert(subList[i] == list[i + ls]);
     assert_eq(array.getLength(), list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -241,6 +247,7 @@ pair<double, double> test_get()
     auto elapsed_mcs_list = 10 * chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
     assert_eq(array.getLength(), list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -279,5 +286,6 @@ pair<double, double> test_replace()
     assert_eq(array.getLength(), list.getLength());
     assert(resAr.getLength() == array.getLength());
     assert(resLs.getLength() == list.getLength());
+    delete[] seq;
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
