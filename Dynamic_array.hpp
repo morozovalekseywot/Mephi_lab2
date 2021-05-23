@@ -97,7 +97,7 @@ public:
     void prepend(T &item)
     {
         resize(m_size + 1);
-        for (int j = m_size-1; j > 0; j--)
+        for (int j = m_size - 1; j > 0; j--)
             str[j] = str[j - 1];
         str[0] = item;
     }
@@ -105,10 +105,15 @@ public:
     /// вставка элемента по индексу
     void insert(T &item, int i)
     {
-        if (i < 0 || i >= m_size)
+        if (i < 0 || i > m_size)
             throw out_of_range("Index out of range in function insert");
+        if (i == 0)
+        {
+            prepend(item);
+            return;
+        }
         resize(m_size + 1);
-        for (int j = m_size-1; j > i; j--)
+        for (int j = m_size - 1; j > i; j--)
             str[j] = str[j - 1];
         str[i] = item;
     }

@@ -60,7 +60,7 @@ pair<double, double> test_concat()
     for (int i = subLs.getLength() / 2; i < subLs.getLength(); i++)
         assert(subLs[i] == subLs[i - subLs.getLength() / 2]);
     assert_eq(array.getLength(), list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -90,7 +90,7 @@ pair<double, double> test_insert()
     for (int i = 8; i < list.getLength() - 4; i++)
         assert(list[i] == p);
     assert_eq(array.getLength(), list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -120,7 +120,7 @@ pair<double, double> test_prepend()
     for (int i = 8; i < list.getLength() - 8; i++)
         assert(list[i] == p);
     assert_eq(array.getLength(), list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -150,7 +150,7 @@ pair<double, double> test_append()
     for (int i = 8; i < list.getLength(); i++)
         assert(list[i] == p);
     assert_eq(array.getLength(), list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -185,7 +185,7 @@ pair<double, double> test_substr()
         assert(subList[i] == list[i + N / 8]);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
     assert_eq(array.getLength(), list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -219,7 +219,7 @@ pair<double, double> test_find()
     for (int i = 0; i < subList.getLength(); i++)
         assert(subList[i] == list[i + ls]);
     assert_eq(array.getLength(), list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -247,7 +247,7 @@ pair<double, double> test_get()
     auto elapsed_mcs_list = 10 * chrono::duration_cast<chrono::microseconds>(end_list - begin_list);
     //cout << "\nList: --- " << elapsed_mcs_list.count() / 1e3 << " miliseconds ---\n";
     assert_eq(array.getLength(), list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
 
@@ -264,11 +264,11 @@ pair<double, double> test_replace()
     }
     Cstring<char> array(new ArraySequence<char>(seq, n));
     Cstring<char> list(new Linked_List_Sequence<char>(seq, n));
-    char *Sub = new char[2];
+    char *Sub = new char[5];
     Sub = "help";
     Cstring<char> help1(new ArraySequence<char>(Sub, 4));
     Cstring<char> help2(new Linked_List_Sequence<char>(Sub, 4));
-    char *hell = new char[4];
+    char *hell = new char[5];
     hell = "hell";
     Cstring<char> hell1(new ArraySequence<char>(hell, 4));
     Cstring<char> hell2(new Linked_List_Sequence<char>(hell, 4));
@@ -286,6 +286,6 @@ pair<double, double> test_replace()
     assert_eq(array.getLength(), list.getLength());
     assert(resAr.getLength() == array.getLength());
     assert(resLs.getLength() == list.getLength());
-    delete[] seq;
+
     return {elapsed_mcs_array.count(), elapsed_mcs_list.count()};
 }
